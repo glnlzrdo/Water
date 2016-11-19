@@ -53,53 +53,6 @@ function addItemButtons() {
             $('#row-' + rCount).remove();
         });
     }
-        
-
-
-
-/*
-        $(document).on('click', "button.cancel", function(event) {
-            row = $(event.target).parent().parent();
-            itemEntryCount--;
-            //alert(parseFloat($(this).parent().parent().find('td.subTot').html()));
-            //subTotal -= parseFloat($(this).parent().parent().find('td.subTot').html());
-            //$('#num-item').html(itemEntryCount);
-            //$('#total-price').html(subTotal.toFixed(2));
-            
-            row.remove();
-        });
-
-
-           $(thisButton).click(function() {
-                    itemEntryCount--;
-                    subTotal -= parseFloat($(thisButton).parent().parent().find('td.subTot').html());
-                
-                $('#num-item').html(itemEntryCount);
-                $('#total-price').html(subTotal.toFixed(2));
-                $(thisButton).parent().parent().remove();
-
-            });
- */       
-
-
- /*
-    $("[id^='cancel']").click(function() {
-
-        var item = $(this).attr("id").substring(7);
-        var totalPrice = parseFloat($('#price-' + item).html()) * parseInt($('#item-' + item).val());
-        $('#row-' + item).remove();
-
-        if (itemEntryCount > 0) {
-            itemEntryCount--;
-            subTotal -= totalPrice;
-        }
-        $('#num-item').html(itemEntryCount);
-        $('#total-price').html(subTotal.toFixed(2));
-
-
-    });
-    */
-
 }
 
 function getBrands(tid) {
@@ -123,9 +76,6 @@ function getBrands(tid) {
             alert(JSON.stringify(e));
         }
     });
-
-
-
 }
 
 
@@ -138,7 +88,6 @@ function parseData(data) {
     $(".left-container").fadeIn("slow");
 
     addItemButtons();
-
 }
 
 function productContainer(a) {
@@ -154,6 +103,4 @@ function productContainer(a) {
     content += '</div></div></div></div>';
 
     $('.left').append(content);
-
-
 }
