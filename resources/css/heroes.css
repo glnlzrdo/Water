@@ -1,0 +1,133 @@
+
+	/* =================================================
+		 CREATED (C) BY ALEX CICAN							APRIL 2012
+		 HTTP://SICANSTUDIOS.COM
+		 ================================================= */
+	/* ==================================================
+		 INSTEAD OF ICONS, LOAD FONT WITH ICONS; 
+		 DOWNLOAD WEB-SYMBOLS TYPEFACE: http://is.gd/xI30JF
+		 ================================================== */
+	
+	/* styling of the card */
+	div[id^="card-container-"]{
+		width: 100px;
+		height: 100px; /* needs fixed height because contents inside are absolutely positioned */
+		margin: 4% auto 0;
+		text-shadow: 0 -1px 0 #444;
+		position: relative;
+		cursor: pointer;
+		-moz-transform-style: preserve-3d;
+		-webkit-transform-style: preserve-3d;
+		-moz-transition: -moz-transform 1.6s;
+		-webkit-transition: -webkit-transform 1.6s;
+		-moz-perspective: 500;
+		-webkit-perspective: 500;
+	}
+
+	/* lighting from the top (over the image and card). Same for both sides */
+	.side:before {
+		content: "";
+		height: 150px;
+		width: 100%;
+		-moz-border-radius: 8px;
+		-webkit-border-radius: 8px;
+		border-radius: 8px;
+		position: absolute;
+		background: -moz-linear-gradient(top,  rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%);
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0.3)), color-stop(100%,rgba(255,255,255,0)));
+		background: -webkit-linear-gradient(top,  rgba(255,255,255,0.3) 0%,rgba(255,255,255,0) 100%);
+		background: -o-linear-gradient(top,  rgba(255,255,255,0.3) 0%,rgba(255,255,255,0) 100%);
+		background: -ms-linear-gradient(top,  rgba(255,255,255,0.3) 0%,rgba(255,255,255,0) 100%);
+		background: linear-gradient(top,  rgba(255,255,255,0.3) 0%,rgba(255,255,255,0) 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4dffffff', endColorstr='#00ffffff',GradientType=0 );
+		/*box-shadow: 0 -1px 0 rgba(255,255,255,0.8);*/
+		left: 0;
+	}
+
+	/* add radius and border at the bottom for profile pic */
+	.front img {
+		/*-moz-border-radius-topleft: 15px;
+		-webkit-border-top-left-radius: 15px;
+		 border-top-left-radius: 15px;
+		-moz-border-radius-topright: 15px;
+		-webkit-border-top-right-radius: 15px;*/
+		border-radius: 8px 8px 8px 8px;
+		/*border-top-right-radius: 15px;*/
+		box-shadow: 0 1px 0 rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.25);
+		width: 100px;
+		height: 100px;
+	}
+
+	/* for both sides, position absolute and hide the behind */
+	.side {
+		-moz-backface-visibility: hidden;
+		-webkit-backface-visibility: hidden;
+		backface-visibility: hidden;
+		position: absolute;
+		
+		-moz-border-radius: 8px;
+		-webkit-border-radius: 8px;
+		border-radius: 8px;
+		/*-moz-box-shadow: inset 0 0 1px rgba(255,255,255,0.3), inset 0 0 150px rgba(0,0,0,0.2), 0 2px 7px 1px rgba(0,0,0,0.4), 0 0 25px 3px rgba(0,0,0,0.3);*/
+		/*-webkit-box-shadow: inset 0 0 1px rgba(255,255,255,0.3), inset 0 0 150px rgba(0,0,0,0.2), 0 2px 7px 1px rgba(0,0,0,0.4), 0 0 25px 3px rgba(0,0,0,0.3);*/
+		
+	}
+
+	
+	/* the back of the card, should be flipped */
+	.back {
+		-moz-transform: rotateY(180deg);
+		-webkit-transform: rotateY(180deg);
+	}
+
+	/* moves the image down a bit */
+	.back img {
+		border-radius: 8px 8px 8px 8px;
+		box-shadow: 0 1px 0 rgba(0,0,0,0.4), 0 2px 0 rgba(255,255,255,0.25);
+		width: 100px;
+		height: 100px;
+	}
+
+	
+
+	/* with jQuery adds the class and flips the card */
+	.rotated {
+		-moz-transform: rotateY(180deg);
+		-webkit-transform: rotateY(180deg);
+	}
+
+	/* Firefox: displays the back side with the front as well. Fixed with opacity change (other browsers affected as well) */
+	.front {
+		-moz-transition: all 0.3s;
+		-moz-transition-delay: 0.3s;
+		-webkit-transition: all 0.3s;
+		-webkit-transition-delay: 0.3s;
+		transition: all 0.3s;
+		transition-delay: 0.3s;
+	}
+
+	/* Firefox fix. When rotated, the front shouldn't be displayed on the back 
+	.rotated .front {
+		filter: alpha(opacity=0);
+		-moz-opacity: 0;
+		-khtml-opacity: 0;
+		opacity: 0;
+	}*/
+
+	/* =================================================
+		 STYLING IS FOR THE PAGE
+		 ================================================= */
+
+
+	/* shadow in front of the bg image */
+	.card-flip{
+		border: 2px solid #CCC;
+	}
+	
+	.separator{
+		margin:10px;
+	}
+
+	
+	
+	
