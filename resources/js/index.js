@@ -13,42 +13,70 @@ window.addEventListener('selectstart', function(e) { e.preventDefault(); return 
 
 var itemEntryCount = 0;
 var subTotal = 0.00;
+var rowCount = 0;
 
 function addItemButtons() {
     $("[id^='add']").click(function() {
         var item = $(this).attr("id").substring(4);
-
+        rowCount++;
         if (isNaN(parseInt($('#item-' + item).val())) || $('#item-' + item).val() < 1)
             $('#item-' + item).val(1);
         var totalPrice = parseFloat($('#price-' + item).html()) * parseInt($('#item-' + item).val());
-        var addToCart = '<tr id="row-' + (itemEntryCount + 1) + '"><td class="remove-entry"><button type="button" class="btn btn-danger" id="cancel-' + (itemEntryCount + 1) + '">-</button></td>';
-        addToCart += '<td id="qty' + (itemEntryCount + 1) + '" class="qty">' + $('#item-' + item).val() + '</td>';
+        var addToCart = '<tr class="row" id="row-' + rowCount + '"><td class="remove-entry"><button type="button" class="btn btn-danger" id="cancel-' + rowCount + '">-</button></td>';
+        addToCart += '<td id="qty' + rowCount + '">' + $('#item-' + item).val() + '</td>';
         addToCart += '<td>' + $('#brand-' + item).html() + '</td>';
-        addToCart += '<td id="subTot' + (itemEntryCount + 1) + '">' + totalPrice + '</td></tr></th>';
+        addToCart += '<td class="subTot" id="subTot' + rowCount + '">' + totalPrice + '</td></tr></th>';
         $('#num-item').html(++itemEntryCount);
         subTotal += totalPrice;
         $('#total-price').html(subTotal.toFixed(2));
 
         $('.purchase').append(addToCart);
+        $('#item-' + item).val("");
 
-        $("[id^='cancel']").click(function() {
+        //var temp = itemEntryCount;
+        //var buttonID = "#cancel-" + tempID;
+        //var thisRow = $('.purchase').find('.row').last();
+        //thisButton = thisRow.find('button');
 
-            //var item = $(this).attr("id").substring();
-            var totalPrice = parseFloat($('#subTot' + itemEntryCount).html()) * parseInt($('#qty' + itemEntryCount).html());
-            $('#row-' + (itemEntryCount)).remove();
+        $("#cancel-" + rowCount).click(function() {
 
-            if (itemEntryCount > 0) {
+            //var item = $(this).attr("id").substring(7);
+            //var totalPrice = parseFloat($('#subTot-' + rowCount).html());
                 itemEntryCount--;
                 subTotal -= totalPrice;
-            }
+            
             $('#num-item').html(itemEntryCount);
             $('#total-price').html(subTotal.toFixed(2));
+
+            $('#row-' + rowCount).remove();
+    });
+
+/*
+        $(document).on('click', "button.cancel", function(event) {
+            row = $(event.target).parent().parent();
+            itemEntryCount--;
+            //alert(parseFloat($(this).parent().parent().find('td.subTot').html()));
+            //subTotal -= parseFloat($(this).parent().parent().find('td.subTot').html());
+            //$('#num-item').html(itemEntryCount);
+            //$('#total-price').html(subTotal.toFixed(2));
+            
+            row.remove();
         });
 
 
+           $(thisButton).click(function() {
+                    itemEntryCount--;
+                    subTotal -= parseFloat($(thisButton).parent().parent().find('td.subTot').html());
+                
+                $('#num-item').html(itemEntryCount);
+                $('#total-price').html(subTotal.toFixed(2));
+                $(thisButton).parent().parent().remove();
+
+            });
+ */       
     });
 
-
+ /*
     $("[id^='cancel']").click(function() {
 
         var item = $(this).attr("id").substring(7);
@@ -64,6 +92,7 @@ function addItemButtons() {
 
 
     });
+    */
 
 }
 
