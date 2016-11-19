@@ -22,10 +22,15 @@ function addItemButtons() {
         if (isNaN(parseInt($('#item-' + item).val())) || $('#item-' + item).val() < 1)
             $('#item-' + item).val(1);
         var totalPrice = parseFloat($('#price-' + item).html()) * parseInt($('#item-' + item).val());
-        var addToCart = '<tr class="row" id="row-' + rowCount + '"><td class="remove-entry"><button type="button" class="btn btn-danger" id="cancel-' + rowCount + '">-</button></td>';
-        addToCart += '<td id="qty' + rowCount + '">' + $('#item-' + item).val() + '</td>';
-        addToCart += '<td>' + $('#brand-' + item).html() + '</td>';
-        addToCart += '<td class="subTot" id="subTot' + rowCount + '">' + totalPrice + '</td></tr></th>';
+        var addToCart = '<tr class="row" id="row-' + rowCount + '">' +                    
+                            '<td id="qty' + rowCount + '">' + $('#item-' + item).val() + '</td>' +
+                            '<td>' + $('#brand-' + item).html() + '</td>' +
+                            '<td class="subTot" id="subTot-' + rowCount + '">' + totalPrice + '</td>' +
+                            '<td class="remove-entry">' +
+                                '<button type="button" class="btn btn-danger" id="cancel-' + rowCount + '">-</button>' +
+                            '</td>';
+                        '</tr>';
+
         $('#num-item').html(++itemEntryCount);
         subTotal += totalPrice;
         $('#total-price').html(subTotal.toFixed(2));
@@ -33,23 +38,24 @@ function addItemButtons() {
         $('.purchase').append(addToCart);
         $('#item-' + item).val("");
 
-        //var temp = itemEntryCount;
-        //var buttonID = "#cancel-" + tempID;
-        //var thisRow = $('.purchase').find('.row').last();
-        //thisButton = thisRow.find('button');
+        assignDelete(rowCount);
+    });
 
-        $("#cancel-" + rowCount).click(function() {
-
-            //var item = $(this).attr("id").substring(7);
-            //var totalPrice = parseFloat($('#subTot-' + rowCount).html());
+    function assignDelete(rCount){
+        $("#cancel-" + rCount).click(function() {            
+            var subtotalPrice = parseFloat($('#subTot-' + rCount).html());
                 itemEntryCount--;
-                subTotal -= totalPrice;
+                subTotal -= subtotalPrice;
             
             $('#num-item').html(itemEntryCount);
             $('#total-price').html(subTotal.toFixed(2));
 
-            $('#row-' + rowCount).remove();
-    });
+            $('#row-' + rCount).remove();
+        });
+    }
+        
+
+
 
 /*
         $(document).on('click', "button.cancel", function(event) {
@@ -74,7 +80,7 @@ function addItemButtons() {
 
             });
  */       
-    });
+
 
  /*
     $("[id^='cancel']").click(function() {
