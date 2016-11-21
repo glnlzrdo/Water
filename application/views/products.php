@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Products</title>
+	<title>Water Shop</title>
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url().'resources/css/bootstrap.min.css' ?>" />
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url().'resources/css/index.css' ?>" />
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url().'resources/css/heroes.css' ?>" />
@@ -18,7 +18,7 @@
 		<h1>Water</h1>
 
 		<select id="water-type">
-				<option value="0">All</option>;
+				<option value="0">All</option>
 			<?php foreach ($list as $row)
 				{ 
     				echo '<option value="'.$row->tid.'">'.$row->name.'</option>';
@@ -39,20 +39,24 @@
 		<div class="right">
 			<div class="content-right-one">Your Shopping Cart</div>
 			<div class="counter"><span id="num-item">0</span> item(s)</div>
-			<table class="purchase">
+			<table class="purchaseHeader">
 				<tr>
 					<th>&nbsp&nbsp&nbsp</th>
 					<th class="qty">Qty</th>
 					<th>Brand</th>
 					<th>Price</th>
 				</tr>
-			
+			</table>
+			<?php echo form_open('water/checkout'); ?>	
+					
+			<table class="purchase">
 
 			</table>
 			<div class="total">Total: Php&nbsp<span id="total-price">0.00</span></div>
-			<div class="check-out">
-				<button type="button" class="btn btn-default product-button" id="checkout-button"> Checkout </button>				
-			</div>
+				<div class="check-out">
+					<button type="submit" class="btn btn-default product-button" id="checkout-button"> Checkout </button>				
+				</div>
+			<?php echo form_close(); ?>
 			<br />
 		</div>
 

@@ -1,5 +1,5 @@
 $(document).ready(function() {
-
+    //$('#autoSubmit').submit();
     getBrands(0);
     $('#search').click(function() {
         var type = $('#water-type').val();
@@ -14,8 +14,9 @@ window.addEventListener('selectstart', function(e) { e.preventDefault(); return 
 var itemEntryCount = 0;
 var subTotal = 0.00;
 var rowCount = 0;
+//var userId = 0;
 
-function addItemButtons() {
+function addItemButtons(userId) {
     $("[id^='add']").click(function() {
         var item = $(this).attr("id").substring(4);
         if (isNaN(parseInt($('#item-' + item).val())) || $('#item-' + item).val() < 1)
@@ -32,8 +33,11 @@ function addItemButtons() {
                 '<td class="subTot" id="subTot-' + item + '">' + totalPrice + '</td>' +
                 '<td class="remove-entry">' +
                 '<button type="button" class="btn btn-danger" id="cancel-' + item + '">-</button>' +
-                '</td>';
-            '</tr>';
+                '</td>' +
+                '<input id="qty" type="hidden" name="qty[]" value="' + qty + '"/>' +
+                '<input type="hidden" name="pid[]" value="' + item + '"/>' +
+                '<input type="hidden" name="uid[]" value="' + userId + '"/>' +
+                '</tr>';
 
             $('#num-item').html(parseInt($('#num-item').html()) + qty);
             $("#qty-" + item).html(qty);
@@ -45,6 +49,7 @@ function addItemButtons() {
             assignDelete(item);
         } else {
             $("#qty-" + item).html(parseInt($("#qty-" + item).html()) + qty);
+            $("#qty").val($("#qty-" + item).html());
             $('#subTot-' + item).html(parseInt($('#subTot-' + item).html()) + totalPrice);
             $('#num-item').html(parseInt($('#num-item').html()) + qty);
             $('#total-price').html(subTotal.toFixed(2));
@@ -64,6 +69,47 @@ function addItemButtons() {
         });
     }
 }
+
+function getItemsFromCart(pid) {
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: "purchases",
+        data: { "pid": pid },
+        success: function(data) {
+            //alert(JSON.stringify(data));
+            parsePurchaseData(data);
+        },
+        error: function(e) {
+
+            alert(JSON.stringify(e));
+        }
+    });
+}
+
+
+function getUser(uid) {
+    $.ajax({
+        type: 'POST',
+        url: 'users',
+        data: { 'uid': uid },
+        success: function(data) {
+            parseUser(data);
+        },
+        error: function(e) {
+
+            alert(JSON.stringify(e));
+        }
+    });
+}
+
+var jsonData;
+
+function parseUser(data) {
+    jsonData = JSON.parse(data);
+    addItemButtons(jsonData[0].uid);
+}
+
 
 function getBrands(tid) {
     $('.ajax-gif').fadeIn();
@@ -88,6 +134,54 @@ function getBrands(tid) {
     });
 }
 
+function parsePurchaseData(data) {
+
+    $.each(data, function(index, obj) {
+        purchaseContainer(obj);
+    });
+    $(".purchase").fadeIn("slow");
+}
+
+function purchaseContainer(cartData) {
+
+    var item = cartData.pid;
+    //if (isNaN(parseInt($('#item-' + item).val())) || $('#item-' + item).val() < 1)
+    //$('#item-' + item).val(1);
+    var qty = cartData.item;
+    var itemPrice = parseFloat($('#price-' + item).html());
+    var totalPrice = itemPrice * qty;
+    subTotal += totalPrice;
+
+
+    var addToCart = '<tr class="row" id="row-' + item + '">' +
+        '<td id="qty-' + item + '">' + qty + '</td>' +
+        '<td>' + $('#brand-' + item).html() + '</td>' +
+        '<td class="subTot" id="subTot-' + item + '">' + totalPrice + '</td>' +
+        '<td class="remove-entry">' +
+        '<button type="button" class="btn btn-danger" id="cancel-' + item + '">-</button>' +
+        '</td>' +
+        '<input type="hidden" name="qty[]" value="' + qty + '"/>' +
+        '<input type="hidden" name="pid[]" value="' + item + '"/>' +
+        '<input type="hidden" name="uid[]" value="' + jsonData[0].uid + '"/>' +
+        '</tr>';
+
+    $('#num-item').html(parseInt($('#num-item').html()) + parseInt(qty));
+    $('#total-price').html(subTotal.toFixed(2));
+    $('.purchase').append(addToCart);
+    $('#item-' + item).val("");
+
+    $("#cancel-" + item).click(function() {
+        var subtotalPrice = parseFloat($('#subTot-' + item).html());
+        itemEntryCount--;
+        subTotal -= subtotalPrice;
+
+        $('#num-item').html(parseInt($('#num-item').html()) - parseInt($('#qty-' + item).html()));
+        $('#total-price').html(subTotal.toFixed(2));
+
+        $('#row-' + item).remove();
+    });
+}
+
 
 function parseData(data) {
 
@@ -97,7 +191,9 @@ function parseData(data) {
     $('.ajax-gif').fadeOut();
     $(".left-container").fadeIn("slow");
 
-    addItemButtons();
+    getUser(1);
+
+    getItemsFromCart();
 }
 
 function productContainer(a) {

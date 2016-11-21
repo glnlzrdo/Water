@@ -46,7 +46,7 @@ class Login extends CI_Controller
                               'loginuser' => TRUE
                          );
                          $this->session->set_userdata($sessiondata);
-                         redirect("water/products");
+                         redirect("cart/index");
                     }
                     else
                     {

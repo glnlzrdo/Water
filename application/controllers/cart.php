@@ -13,12 +13,12 @@ class Cart extends CI_Controller {
     public function index()
     {
         // 1. Load the data:
-        $all_todos = $this->cart_model->get_all_entries();
+        $all_items = $this->cart_model->get_all_entries();
         // 2. Make the data available to the view
         $data = array();   
-        $data['todos'] = $all_todos;
+        $data['cart'] = $all_items;
         // 3. Render the view:
-        $this->load->view('todos/index', $data);
+        $this->load->view('cart_view', $data);
     }
 
     public function update_completed() {

@@ -9,7 +9,30 @@ class Cart_model extends CI_Model {
     } 
 
     function get_all_entries() {
-        $query = $this->db->get('cart');
+        $uid = 0;
+        $this->db->select('*');
+		$this->db->from('user');
+		$this->db->where('email', $this->session->userdata('email'));
+        $query = $this->db->get();
+
+        $results = array(); 
+        foreach ($query->result() as $result) {
+            $results[] = $result; 
+            $uid = $result->uid;  
+        }
+
+        $this->db->select('cart.item, product.pid, 
+		                   product.brand, 
+		                   product.price, 
+		                   product.src, type.name , user.first_name');
+        $this->db->from('cart'); 
+        $this->db->join('product', 'product.pid= cart.pid');
+        $this->db->join('type', 'product.tid= type.tid');
+        $this->db->join('user', 'user.uid=' . $uid);
+        
+
+        $query = $this->db->get(); 
+
         $results = array(); 
         foreach ($query->result() as $result) {
             $results[] = $result; 
@@ -27,7 +50,7 @@ class Cart_model extends CI_Model {
         //
         // 2. and update only the fields designated in $update_info
         //
-        $this->db->update('todos', $update_info, $update_criteria);
+        $this->db->update('cart', $update_info, $update_criteria);
     }
 
 }
