@@ -51,8 +51,9 @@
 			</table>
 			<div class="total">Total: Php&nbsp<span id="total-price">0.00</span></div>
 			<div class="check-out">
-				<button type="button" class="btn btn-default product-button" id="checkout-button"> Checkout </button>
+				<button type="button" class="btn btn-default product-button" id="checkout-button"> Checkout </button>				
 			</div>
+			<br />
 		</div>
 
 	</div>

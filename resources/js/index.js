@@ -18,36 +18,46 @@ var rowCount = 0;
 function addItemButtons() {
     $("[id^='add']").click(function() {
         var item = $(this).attr("id").substring(4);
-        rowCount++;
         if (isNaN(parseInt($('#item-' + item).val())) || $('#item-' + item).val() < 1)
             $('#item-' + item).val(1);
-        var totalPrice = parseFloat($('#price-' + item).html()) * parseInt($('#item-' + item).val());
-        var addToCart = '<tr class="row" id="row-' + rowCount + '">' +                    
-                            '<td id="qty' + rowCount + '">' + $('#item-' + item).val() + '</td>' +
-                            '<td>' + $('#brand-' + item).html() + '</td>' +
-                            '<td class="subTot" id="subTot-' + rowCount + '">' + totalPrice + '</td>' +
-                            '<td class="remove-entry">' +
-                                '<button type="button" class="btn btn-danger" id="cancel-' + rowCount + '">-</button>' +
-                            '</td>';
-                        '</tr>';
-
-        $('#num-item').html(++itemEntryCount);
+        var qty = parseInt($('#item-' + item).val());
+        var itemPrice = parseFloat($('#price-' + item).html());
+        var totalPrice = itemPrice * qty;
         subTotal += totalPrice;
-        $('#total-price').html(subTotal.toFixed(2));
 
-        $('.purchase').append(addToCart);
-        $('#item-' + item).val("");
+        if ($(".purchase").find("#row-" + item).html() == undefined) {
+            var addToCart = '<tr class="row" id="row-' + item + '">' +
+                '<td id="qty-' + item + '">' + $('#item-' + item).val() + '</td>' +
+                '<td>' + $('#brand-' + item).html() + '</td>' +
+                '<td class="subTot" id="subTot-' + item + '">' + totalPrice + '</td>' +
+                '<td class="remove-entry">' +
+                '<button type="button" class="btn btn-danger" id="cancel-' + item + '">-</button>' +
+                '</td>';
+            '</tr>';
 
-        assignDelete(rowCount);
+            $('#num-item').html(parseInt($('#num-item').html()) + qty);
+            $("#qty-" + item).html(qty);
+            $('#subTot-' + item).html(totalPrice);
+            $('#total-price').html(subTotal.toFixed(2));
+            $('.purchase').append(addToCart);
+            $('#item-' + item).val("");
+
+            assignDelete(item);
+        } else {
+            $("#qty-" + item).html(parseInt($("#qty-" + item).html()) + qty);
+            $('#subTot-' + item).html(parseInt($('#subTot-' + item).html()) + totalPrice);
+            $('#num-item').html(parseInt($('#num-item').html()) + qty);
+            $('#total-price').html(subTotal.toFixed(2));
+        }
     });
 
-    function assignDelete(rCount){
-        $("#cancel-" + rCount).click(function() {            
+    function assignDelete(rCount) {
+        $("#cancel-" + rCount).click(function() {
             var subtotalPrice = parseFloat($('#subTot-' + rCount).html());
-                itemEntryCount--;
-                subTotal -= subtotalPrice;
-            
-            $('#num-item').html(itemEntryCount);
+            itemEntryCount--;
+            subTotal -= subtotalPrice;
+
+            $('#num-item').html(parseInt($('#num-item').html()) - parseInt($('#qty-' + rCount).html()));
             $('#total-price').html(subTotal.toFixed(2));
 
             $('#row-' + rCount).remove();

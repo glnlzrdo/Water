@@ -44,6 +44,7 @@
     background: #202020;
     color: #FFCC00;
     text-align: center;
+    overflow: auto;
 }
 
 .ajax-gif {
@@ -87,6 +88,7 @@
     -moz-transition: all 1s ease;
     /* Firefox */
     transition: all 1s ease;
+    overflow: hidden;
 }
 
 .purchase tr:hover {
@@ -97,6 +99,7 @@
 .purchase td {
     padding: 10px;
 }
+
 
 .image-container {
     background: #fff;

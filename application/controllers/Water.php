@@ -10,7 +10,7 @@ class Water extends CI_Controller {
 	
 	public function index()
 	{
-		$this->load->view('products');
+		$this->load->view('index');
 	}
 
 
