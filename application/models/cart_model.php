@@ -9,26 +9,16 @@ class Cart_model extends CI_Model {
     } 
 
     function get_all_entries() {
-        $uid = 0;
-        $this->db->select('*');
-		$this->db->from('user');
-		$this->db->where('email', $this->session->userdata('email'));
-        $query = $this->db->get();
-
-        $results = array(); 
-        foreach ($query->result() as $result) {
-            $results[] = $result; 
-            $uid = $result->uid;  
-        }
+        $uid = $this->session->userdata('user_id');
 
         $this->db->select('cart.item, product.pid, 
 		                   product.brand, 
 		                   product.price, 
-		                   product.src, type.name , user.first_name');
+		                   product.src, type.name');
         $this->db->from('cart'); 
         $this->db->join('product', 'product.pid= cart.pid');
         $this->db->join('type', 'product.tid= type.tid');
-        $this->db->join('user', 'user.uid=' . $uid);
+        $this->db->where('uid', $uid);
         
 
         $query = $this->db->get(); 

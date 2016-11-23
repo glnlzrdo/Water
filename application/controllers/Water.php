@@ -13,7 +13,7 @@ class Water extends CI_Controller {
 		$this->load->view('index');
 	}
 
-
+/*
 	public function user() {
 		$uid = $this->input->post('uid');
 		
@@ -31,11 +31,12 @@ class Water extends CI_Controller {
 	
 		echo json_encode($query->result());
 	}
+	*/
 
 	public function products()
 	{
 
-		$uid = $this->product_model->user();
+		$uid = $this->session->userdata('user_id');
 
 		if ($uid != "" || $uid != null) {
 
@@ -78,19 +79,17 @@ class Water extends CI_Controller {
 
 		$qty = $this->input->post('qty');
 		$pid = $this->input->post('pid');
-		$uid = $this->input->post('uid');
+		$uid = $this->session->userdata('user_id');
 		//echo $qty;
 
 		// 1. Delete all entries on the cart database
-		foreach ($pid as $p_id) {
-			$this->product_model->clear_cart($p_id);
-		}
+			$this->product_model->clear_cart();
 
 		// 2. Re-insert updated entries from the cart table
         $count = count($pid);
 		for ($i = 0; $i < $count; $i++) :
 			$data = array(
-				'uid' => $uid[$i],				
+				'uid' => $uid,				
 				'pid' => $pid[$i],
 				'item' => $qty[$i]
 			);

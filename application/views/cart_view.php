@@ -10,13 +10,11 @@ href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 <body>
 
   <div class="container">
-    <?php echo form_open('water/products'); ?>
-    <?php foreach ($cart as $userSearch) {
-        }
+    <?php echo form_open('water/products'); 
         $totalAmount = 0;
     ?>
     
-    <h1>Welcome back, <?php echo $this->session->userdata('email')?></h1>
+    <h1>Welcome back, <?php echo $this->session->userdata('name')?></h1>
     <h3>Items inside your Cart:</h3>
 
     <div class="list-group">

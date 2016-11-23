@@ -37,12 +37,15 @@ class Login extends CI_Controller
                if ($this->input->post('btn_login') == "Login")
                {
                     //check if email and password is correct
-                    $usr_result = $this->login_model->get_user($email, $password);
+                    $usr_query = $this->login_model->get_user($email, $password);
+                    $usr_result = $usr_query->num_rows();
                     if ($usr_result > 0) //active user record is present
-                    {
+                    {                        
                          //set the session variables
                          $sessiondata = array(
                               'email' => $email,
+                              'name' => $usr_query->row()->first_name,
+                              'user_id' => $usr_query->row()->uid,
                               'loginuser' => TRUE
                          );
                          $this->session->set_userdata($sessiondata);

@@ -14,6 +14,7 @@ class login_model extends CI_Model
           $sql = "select * from user where email = '" 
                 . $email . "' and password = '" . md5($pwd) . "'";
           $query = $this->db->query($sql);
-          return $query->num_rows();
+          //return $query->num_rows();
+          return $query;
      }
 }?>

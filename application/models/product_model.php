@@ -16,7 +16,7 @@ class Product_model extends CI_Model {
 
 	}
 
-
+/*
 	public function user() {
 
 		$uid = 0;
@@ -41,7 +41,7 @@ class Product_model extends CI_Model {
 		$this->db->from('user');
 		$this->db->where('email', $this->session->userdata('email'));
         $query = $this->db->get();
-/*
+
         $results = array(); 
         foreach ($query->result() as $result) {
             $results[] = $result; 
@@ -49,35 +49,22 @@ class Product_model extends CI_Model {
         }
 
 		$query = $this->db->get();
-*/
+
 				
 		return $query;
 	}
+	*/	
 
-	public function purchases($pid) {
-
-		$uid = 0;
-        $this->db->select('*');
-		$this->db->from('user');
-		$this->db->where('email', $this->session->userdata('email'));
-        $query = $this->db->get();
-
-        $results = array(); 
-        foreach ($query->result() as $result) {
-            $results[] = $result; 
-            $uid = $result->uid;  
-        }
-
+	public function purchases($uid) {
 		$this->db->select('cart.item, product.pid, 
 		                   product.brand, 
 		                   product.price');
         $this->db->from('cart'); 
         $this->db->join('product', 'product.pid= cart.pid');
-        $this->db->join('user', 'user.uid=' . $uid);
+        $this->db->where('uid', $this->session->userdata('user_id'));
 
-
-		return $query = $this->db->get(); 
-
+		$query = $this->db->get(); 
+		return $query;
 	}
 
 	public function brands($tid)
@@ -100,13 +87,9 @@ class Product_model extends CI_Model {
 
 	}
 
-	function clear_cart($p_id) {
-		//$this->db->delete('*');
-		//$this->db->from('cart');
-		
-		//$this->db->where('pid', $p_id);
-		//$this->db->delete('cart');
-		$this->db->empty_table('cart'); 
+	function clear_cart() {
+		$this->db->where('uid', $this->session->userdata('user_id'));
+		$this->db->delete('cart'); 
 	}
 
 	

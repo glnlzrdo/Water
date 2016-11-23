@@ -14,9 +14,8 @@ window.addEventListener('selectstart', function(e) { e.preventDefault(); return 
 var itemEntryCount = 0;
 var subTotal = 0.00;
 var rowCount = 0;
-//var userId = 0;
 
-function addItemButtons(userId) {
+function addItemButtons() {
     $("[id^='add']").click(function() {
         var item = $(this).attr("id").substring(4);
         if (isNaN(parseInt($('#item-' + item).val())) || $('#item-' + item).val() < 1)
@@ -34,9 +33,8 @@ function addItemButtons(userId) {
                 '<td class="remove-entry">' +
                 '<button type="button" class="btn btn-danger" id="cancel-' + item + '">-</button>' +
                 '</td>' +
-                '<input id="qty" type="hidden" name="qty[]" value="' + qty + '"/>' +
+                '<input id="qty' + item + '" type="hidden" name="qty[]" value="' + qty + '"/>' +
                 '<input type="hidden" name="pid[]" value="' + item + '"/>' +
-                '<input type="hidden" name="uid[]" value="' + userId + '"/>' +
                 '</tr>';
 
             $('#num-item').html(parseInt($('#num-item').html()) + qty);
@@ -49,67 +47,27 @@ function addItemButtons(userId) {
             assignDelete(item);
         } else {
             $("#qty-" + item).html(parseInt($("#qty-" + item).html()) + qty);
-            $("#qty").val($("#qty-" + item).html());
+            //$("#qty").val(parseInt($("#item-" + item).html()) + parseInt($("#qty").val()));
+            $("#qty" + item).val($("#qty-" + item).html());
             $('#subTot-' + item).html(parseInt($('#subTot-' + item).html()) + totalPrice);
             $('#num-item').html(parseInt($('#num-item').html()) + qty);
             $('#total-price').html(subTotal.toFixed(2));
         }
     });
-
-    function assignDelete(rCount) {
-        $("#cancel-" + rCount).click(function() {
-            var subtotalPrice = parseFloat($('#subTot-' + rCount).html());
-            itemEntryCount--;
-            subTotal -= subtotalPrice;
-
-            $('#num-item').html(parseInt($('#num-item').html()) - parseInt($('#qty-' + rCount).html()));
-            $('#total-price').html(subTotal.toFixed(2));
-
-            $('#row-' + rCount).remove();
-        });
-    }
 }
 
-function getItemsFromCart(pid) {
-    $.ajax({
-        type: "POST",
-        dataType: "json",
-        url: "purchases",
-        data: { "pid": pid },
-        success: function(data) {
-            //alert(JSON.stringify(data));
-            parsePurchaseData(data);
-        },
-        error: function(e) {
+function assignDelete(rCount) {
+    $("#cancel-" + rCount).click(function() {
+        var subtotalPrice = parseFloat($('#subTot-' + rCount).html());
+        itemEntryCount--;
+        subTotal -= subtotalPrice;
 
-            alert(JSON.stringify(e));
-        }
+        $('#num-item').html(parseInt($('#num-item').html()) - parseInt($('#qty-' + rCount).html()));
+        $('#total-price').html(subTotal.toFixed(2));
+
+        $('#row-' + rCount).remove();
     });
 }
-
-
-function getUser(uid) {
-    $.ajax({
-        type: 'POST',
-        url: 'users',
-        data: { 'uid': uid },
-        success: function(data) {
-            parseUser(data);
-        },
-        error: function(e) {
-
-            alert(JSON.stringify(e));
-        }
-    });
-}
-
-var jsonData;
-
-function parseUser(data) {
-    jsonData = JSON.parse(data);
-    addItemButtons(jsonData[0].uid);
-}
-
 
 function getBrands(tid) {
     $('.ajax-gif').fadeIn();
@@ -128,7 +86,33 @@ function getBrands(tid) {
             parseData(data);
         },
         error: function(e) {
+            alert(JSON.stringify(e));
+        }
+    });
+}
 
+function parseData(data) {
+
+    $.each(data, function(index, obj) {
+        productContainer(obj);
+    });
+    $('.ajax-gif').fadeOut();
+    $(".left-container").fadeIn("slow");
+    getItemsFromCart();
+    addItemButtons();
+}
+
+function getItemsFromCart(uid) {
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: "purchases",
+        data: { "uid": uid },
+        success: function(data) {
+            //alert(JSON.stringify(data));
+            parsePurchaseData(data);
+        },
+        error: function(e) {
             alert(JSON.stringify(e));
         }
     });
@@ -160,9 +144,8 @@ function purchaseContainer(cartData) {
         '<td class="remove-entry">' +
         '<button type="button" class="btn btn-danger" id="cancel-' + item + '">-</button>' +
         '</td>' +
-        '<input type="hidden" name="qty[]" value="' + qty + '"/>' +
+        '<input id="qty' + item + '" type="hidden" name="qty[]" value="' + qty + '"/>' +
         '<input type="hidden" name="pid[]" value="' + item + '"/>' +
-        '<input type="hidden" name="uid[]" value="' + jsonData[0].uid + '"/>' +
         '</tr>';
 
     $('#num-item').html(parseInt($('#num-item').html()) + parseInt(qty));
@@ -180,20 +163,6 @@ function purchaseContainer(cartData) {
 
         $('#row-' + item).remove();
     });
-}
-
-
-function parseData(data) {
-
-    $.each(data, function(index, obj) {
-        productContainer(obj);
-    });
-    $('.ajax-gif').fadeOut();
-    $(".left-container").fadeIn("slow");
-
-    getUser(1);
-
-    getItemsFromCart();
 }
 
 function productContainer(a) {
